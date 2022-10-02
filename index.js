@@ -224,12 +224,39 @@ function withdraw() {
         .then((answer) => {
           const amount = answer['amount'];
 
-          console.log(amount);
-          opration();
+          removeAmount(accountName, amount);
         })
         .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
+}
+
+function removeAmount(accountName, amount) {
+  const accountData = getAccont(accountName);
+
+  if (!amount) {
+    console.log(
+      chalk.bgRed.black('Ocorreu um erro, tente novamente mais tarde!')
+    );
+    return withdraw();
+  }
+
+  if (accountData.balance < amount) {
+    console.log(chalk.bgRed.black('Valor indisponivel'));
+  }
+
+  accountData.balance = parseFloat(accountData.balance) - parseFloat(amount);
+
+  fs.writeFileSync(
+    `accounts/${accountName}.json`,
+    JSON.stringify(accountData),
+    function (error) {
+      console.log(error);
+    }
+  );
+
+  console.log(chalk.green(`Foi realizado um saque de R$${amount} da sua conta!`));
+  opration()
 }
 
 console.log('Iniciamos o Accounts');
