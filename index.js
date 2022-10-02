@@ -30,16 +30,14 @@ function opration() {
 
       if (action === 'Criar conta') {
         createAccount();
-      } else if(action === 'Consultar Saldo' ) {
-
-      } else if(action === 'Depositar'){
-
-      } else if(action === 'Sacar'){
-
-      } else if( action === 'Sair'){
+      } else if (action === 'Consultar Saldo') {
+      } else if (action === 'Depositar') {
+        deposit();
+      } else if (action === 'Sacar') {
+      } else if (action === 'Sair') {
         console.log(chalk.bgBlue.black('obrigado por usar o Account!'));
 
-        process.exit()
+        process.exit();
       }
     })
     .catch((error) => console.log(error));
@@ -74,7 +72,7 @@ function buildAccount() {
           chalk.bgRed.black('Esta conta já existe, escolha outro nome!')
         );
         buildAccount();
-        return
+        return;
       }
 
       fs.writeFileSync(
@@ -85,11 +83,39 @@ function buildAccount() {
         }
       );
 
-
       console.log(chalk.green('Parabéns, sua conta foi criada!'));
-      opration()
+      opration();
     })
     .catch((error) => console.log(error));
+}
+
+// add an amount to aser account
+
+function deposit() {
+  inquirer
+    .prompt([
+      {
+        name: 'accountName',
+        message: 'Qual é o nome da sua conta?',
+      },
+    ])
+    .then((answer) => {
+      const accountName = answer['accountName'];
+      // verify if account exists
+
+      if(!checkAccount(accountName)){
+        return deposit()
+      }
+    })
+    .catch((error) => console.log(error));
+}
+
+function checkAccount(accountName) {
+  if (!fs.existsSync(`accounts/${accountName}.json`)) {
+    console.log(chalk.bgRed.black('Esta conta ja existe, escolha outro nome!'));
+    return false;
+  }
+  return true;
 }
 
 console.log('Iniciamos o Accounts');
