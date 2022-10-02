@@ -255,8 +255,10 @@ function removeAmount(accountName, amount) {
     }
   );
 
-  console.log(chalk.green(`Foi realizado um saque de R$${amount} da sua conta!`));
-  opration()
+  console.log(
+    chalk.green(`Foi realizado um saque de R$${amount} da sua conta!`)
+  );
+  opration();
 }
 
 console.log('Iniciamos o Accounts');
